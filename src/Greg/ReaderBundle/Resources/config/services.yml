@@ -1,0 +1,7 @@
+parameters:
+#    greg_reader.example.class: Greg\ReaderBundle\Example
+
+services:
+#    greg_reader.example:
+#        class: %greg_reader.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,8 @@
+greg_reader:
+    resource: "@GregReaderBundle/Resources/config/routing.yml"
+    prefix:   /reader
+
+greg_blog:
+    resource: "@GregBlogBundle/Resources/config/routing.yml"
+    prefix:   /blog
+

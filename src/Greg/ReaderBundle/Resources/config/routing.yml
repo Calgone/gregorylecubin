@@ -1,0 +1,7 @@
+greg_reader_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: GregReaderBundle:Default:index }
+
+HelloTheReader:
+    path:   /hello-reader
+    defaults: { _controller: GregReaderBundle:Reader:index }
