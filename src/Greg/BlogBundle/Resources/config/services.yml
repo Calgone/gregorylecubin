@@ -1,7 +1,12 @@
 parameters:
 #    greg_blog.example.class: Greg\BlogBundle\Example
 
-services:
+#services:
 #    greg_blog.example:
 #        class: %greg_blog.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+services:
+    greg_blog.antispam:
+        class: Greg\BlogBundle\Antispam
+        arguments: [@mailer, %locale%, 3]

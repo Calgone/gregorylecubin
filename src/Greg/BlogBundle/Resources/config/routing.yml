@@ -1,7 +1,3 @@
-HelloTheWorld:
-    path:  /hello-world
-    defaults: { _controller: GregBlogBundle:Blog:accueil }
-    
 blog_accueil:
     path: /{page}
     defaults: { _controller: GregBlogBundle:Blog:index, page: 1 }
@@ -11,13 +7,8 @@ blog_accueil:
 blog_voir:
     path: /article/{id}
     defaults: { _controller: GregBlogBundle:Blog:voir }
-    
-blog_voir_slug:
-    path: /{annee}/{slug}.{format}
-    defaults: { _controller: GregBlogBundle:Blog:voirSlug, format: html }
     requirements:
-      annee: \d{4}
-      format: html|xml
+      id: \d+
     
 blog_ajouter:
     path: /ajouter
@@ -25,7 +16,7 @@ blog_ajouter:
     
 blog_modifier:
     path: /modifier/{id}
-    defaults: { _controller: GregBlogBundle:Blog/modifier }
+    defaults: { _controller: GregBlogBundle:Blog:modifier }
     requirements: 
       id: \d+
       
@@ -34,3 +25,7 @@ blog_supprimer:
     defaults: { _controller: GregBlogBundle:Blog:supprimer }
     requirements: 
       id: \d+
+      
+blog_envoimail:
+    path: /mailer
+    defaults: { _controller: GregBlogBundle:Blog:mailer }

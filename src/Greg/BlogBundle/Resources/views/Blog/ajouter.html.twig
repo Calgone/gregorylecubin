@@ -1,0 +1,22 @@
+{% extends "GregBlogBundle::layout.html.twig" %}
+
+{% block title %}
+    Modifier un article - {{ parent() }}
+{% endblock %}
+
+{% block blog_body %}
+<h2>Ajouter un article</h2>
+    {% include "GregBlogBundle:Blog:form_article.html.twig" %}
+<p>
+    Attention: cet article sera ajouté directement 
+    sur la page d'accueil après validation du formulaire.
+</p>
+
+<p>
+    <a href="{{ path('blog_accueil') }}" class="btn">
+        <i class="icon-chevron-left"></i>
+        Retour à l'accueil du blog
+    </a>
+</p>
+
+{% endblock %}
