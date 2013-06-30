@@ -5,20 +5,22 @@ Lecture d'un article - {{ parent() }}
 {% endblock %}
 
 {% block blog_body %}
-<h2>
-{# on vérifie qu'une image soit bien associée à l'article #}
-{% if article.image is not null %}
-        <img src="{{ article.image.url }}" alt="{{ article.image.alt }}" />
-{% endif %}
-{{ article.titre }}
-</h2>
 
-  <i>Par {{ article.auteur }}, le {{ article.date|date('d/m/Y') }}</i>
- 
-  <div class="well">
-    {{ article.contenu }}
-  </div>
- 
+{% include "GregBlogBundle:Blog:article.html.twig" %}
+
+<div>
+    <ul>
+      {% for commentaire in article.commentaires %}
+            <li>
+              <strong>{{ commentaire.auteur }}</strong> :
+                le {{ commentaire.date|date('d/m/Y') }}
+              <p>
+                  {{ commentaire.contenu }}
+              </p>
+            </li>
+      {% endfor %}
+    </ul>
+</div>
   <p>
     <a href="{{ path('blog_accueil') }}" class="btn">
       <i class="icon-chevron-left"></i>

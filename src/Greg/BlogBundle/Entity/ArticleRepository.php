@@ -3,6 +3,7 @@
 namespace Greg\BlogBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * ArticleRepository
@@ -12,4 +13,49 @@ use Doctrine\ORM\EntityRepository;
  */
 class ArticleRepository extends EntityRepository
 {
+    public function myFindAll()
+    {
+        $queryBuilder = $this->createQueryBuilder('a');
+        
+        // On récupère la Query à partir du QueryBuilder
+        $query = $queryBuilder->getQuery();
+        
+        // On récupère les résultats à partir de la Query
+        $resultats = $query->getResult();
+        
+        // On retourne les résultats
+        return $resultats;
+    }
+    
+    public function getArticles($nbParPage, $page)
+    {
+        if ($page < 1) {
+            throw new \InvalidArgumentException("L'argument \$page ne peut être inférieur à 1 (valeur : $page)");
+        }
+        
+        $query = $this->createQueryBuilder('a')
+                // on joint sur l'attribut image
+                ->leftJoin('a.image', 'i')
+                ->addSelect('i')
+                // on joint sur l'attribut categories
+                ->leftJoin('a.categories', 'c')
+                ->addSelect('c')
+                ->orderBy('a.date', 'DESC')
+                ->getQuery();
+        // On définit l'article à partir duquel commencer la liste
+        $query->setFirstResult(($page - 1) * $nbParPage)
+              ->setMaxResults($nbParPage);
+        
+        return new Paginator($query);
+    }
+
+
+    public function getAvecCategories(array $nom_categories)
+    {
+        $qb = $this->createQueryBuilder('a');
+        $qb->join('a.categories', 'c')
+            ->where($qb->expr()->in('c.nom', $nom_categories));
+        return $qb->getQuery()->getResult();
+        
+    }
 }

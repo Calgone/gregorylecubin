@@ -1,0 +1,15 @@
+{# template père du bundle Blog #}
+{% extends "::layout.html.twig" %}
+{% block title %}
+Reader - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {# sous-titre commun à tout le bundle #}
+    <h1>Reader</h1>
+    <hr />
+    
+    {# on définit un nouveau block que les vues du bundle pourront utiliser #}
+    {% block reader_body %}
+    {% endblock %}
+{% endblock %}

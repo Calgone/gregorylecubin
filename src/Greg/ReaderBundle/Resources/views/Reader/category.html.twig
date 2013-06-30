@@ -1,0 +1,24 @@
+{# Variable temporaire, définie à false #}
+{% set accueil = accueil|default(false) %}
+
+<h3>
+    {{ category.name }}
+</h3>
+
+{# On affiche les subs de cette catégorie #}
+{% if category.subs.count > 0 %}
+<div class="well well-small">
+    Abonnements :
+    <ul>
+    {% for sub in category.subs %}
+            <li>
+        {% if accueil %}
+            <a href="{{ path('reader_voir_sub', {'subId': sub.id} ) }}">{{ sub.title }}</a>
+        {% else %}
+            {{ sub.title }}
+        {% endif %}
+            </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}

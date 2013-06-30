@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="blog_article")
  * @ORM\Entity(repositoryClass="Greg\BlogBundle\Entity\ArticleRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Article
 {
@@ -55,13 +56,40 @@ class Article
     private $publication;
     
     /**
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="date_edition", type="datetime", nullable=true)
+     */
+    private $dateEdition;
+    
+    /**
      * @ORM\OneToOne(targetEntity="Greg\BlogBundle\Entity\Image", cascade={"persist"})
      */
     private $image;
     
+    /**
+     * @ORM\ManyToMany(targetEntity="Greg\BlogBundle\Entity\Categorie", cascade={"persist"}) 
+     */
+    private $categories;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Greg\BlogBundle\Entity\Commentaire", mappedBy="article")
+     */
+    private $commentaires;
+    
     public function __construct() {
         $this->date = new \DateTime();
         $this->publication = true;
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->setDateEdition(new \DateTime());
     }
 
     /**
@@ -210,5 +238,98 @@ class Article
     public function getImage()
     {
         return $this->image;
+    }
+
+    
+
+    /**
+     * Add categories
+     *
+     * @param \Greg\BlogBundle\Entity\Categorie $categories
+     * @return Article
+     */
+    public function addCategorie(\Greg\BlogBundle\Entity\Categorie $categorie)
+    {
+        $this->categories[] = $categorie;
+    
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Greg\BlogBundle\Entity\Categorie $categories
+     */
+    public function removeCategorie(\Greg\BlogBundle\Entity\Categorie $categorie)
+    {
+        $this->categories->removeElement($categorie);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Set dateEdition
+     *
+     * @param \DateTime $dateEdition
+     * @return Article
+     */
+    public function setDateEdition($dateEdition)
+    {
+        $this->dateEdition = $dateEdition;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateEdition
+     *
+     * @return \DateTime 
+     */
+    public function getDateEdition()
+    {
+        return $this->dateEdition;
+    }
+
+    /**
+     * Add commentaires
+     *
+     * @param \Greg\BlogBunlde\Entity\Commentaire $commentaires
+     * @return Article
+     */
+    public function addCommentaire(\Greg\BlogBunlde\Entity\Commentaire $commentaires)
+    {
+        $this->commentaires[] = $commentaires;
+        $commentaires->setArticle($this);
+        return $this;
+    }
+
+    /**
+     * Remove commentaires
+     *
+     * @param \Greg\BlogBunlde\Entity\Commentaire $commentaires
+     */
+    public function removeCommentaire(\Greg\BlogBunlde\Entity\Commentaire $commentaires)
+    {
+        $this->commentaires->removeElement($commentaires);
+        // Si la relation était facultative (nullable=true, ce qui n'est pas le cas ici attention) :       
+        // $commentaire->setArticle(null);
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
     }
 }

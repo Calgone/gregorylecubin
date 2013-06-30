@@ -2,5 +2,8 @@
 
 <h3>Formulaire d'article</h3>
 <div class="well">
-    Ici notre formulaire
+    <form method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+            <input type="submit" class="btn btn-primary" />
+    </form>
 </div>

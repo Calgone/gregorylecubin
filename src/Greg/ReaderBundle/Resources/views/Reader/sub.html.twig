@@ -1,0 +1,28 @@
+{% extends "GregReaderBundle::layout.html.twig" %}
+
+{% block title %} 
+Accueil - {{ parent() }} 
+{% endblock %}
+
+{% block reader_body %} 
+<h2>Liste des flux >></h2>
+
+<ul>
+    {% for feed in feeds %}
+        {% include 'GregReaderBundle:Reader:feed.html.twig' with {'accueil': true} %}
+        <hr />
+    {% else %}
+        <li>Pas de flux pour cet abonnement !</li>
+    {% endfor %}
+</ul>
+{# <div class="pagination">
+    <ul>
+     On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b 
+        {% for p in range(1, nbParPage) %}
+            <li{% if p == page %} class="active"{% endif %}>
+                <a href="{{ path('blog_accueil', {'page': p}) }}">{{ p }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div> #}
+{% endblock %}
