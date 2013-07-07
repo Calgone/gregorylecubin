@@ -9,4 +9,4 @@ parameters:
 services:
     greg_blog.antispam:
         class: Greg\BlogBundle\Antispam
-        arguments: [mailer, %locale%, 3]
+        arguments: ["@mailer", %locale%, 3]

@@ -1,10 +1,5 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of RssParser
  *
@@ -13,104 +8,66 @@
 
 namespace Greg\ReaderBundle\Rss;
 
+//use Greg\ReaderBundle\Entity\Channel;
+use Greg\ReaderBundle\Entity\Item;
+use Doctrine\ORM\EntityManager;
+
 class RssParser {
-    
-    protected $url;
-    protected $description;
-    protected $language;
-    protected $link;
-    protected $title;
-    
-    public function __construct(){}
-    
-    public function parser($url, $nb = null, $tag = null)
-    {
-        $this->url = $url;
-        
-        $rss = simplexml_load_file($this->url);
-        
-        if ($rss)
-        {
-            if (!empty($rss->channel->language))
-            {
-                $this->language = (string) $rss->channel->language;
-            }
-            if (!empty($rss->channel->title))
-            {
-                $this->title = (string) $rss->channel->title;
-            }
-            if (!empty($rss->channel->description))
-            {
-                $this->description = (string) $rss->channel->description;
-            }
-            if (!empty($rss->channel->link))
-            {
-                $this->link = $rss->channel->link;
-            }
-            
+
+    protected $em;
+
+    public function __construct(EntityManager $em) {
+        $this->em = $em;
+    }
+
+    public function parser($nb = 5) {
+        $str = '';
+        $i = 0;
+
+        $channels = $this->em->getRepository('GregReaderBundle:Channel')
+                ->getChannels();
+//        return(var_dump($channels));
+        foreach ($channels as $channel) {
             $i = 0;
-            
-            foreach ($rss->channel->item as $item)
-            {
-                $itemTitle = (string) $item->title;
-                $itemPubDate = (string) $item->pubDate;
-                $itemLink = (string) $item->link;
-                $itemDescription = (string) $item->description;
-                $itemCategory = array();
-                
-                if ($tag == false)
-                    $itemDescription = strip_tags ($itemDescription);
-                
-                $y = 0;
-                
-                foreach ($item->category as $cat)
-                {
-                    $itemCategory[$y] = (string) $cat;
-                    $y++;
+            $rss = simplexml_load_file($channel->getXmlUrl());
+
+            if ($rss) {
+                foreach ($rss->channel->item as $rssItem) {
+                    
+                    $cat = '';
+                    
+                    $item = new Item();
+                    $item->setTitle($rssItem->title);
+                    $pubd = new \DateTime($rssItem->pubDate);
+                    $item->setPubDate($pubd);
+                    $item->setLink($rssItem->link);
+                    $item->setDescription($rssItem->description);
+                    $item->setAuthor($rssItem->author);
+                    $item->setComments($rssItem->comments);
+                    $item->setEnclosure($rssItem->enclosure);
+                    $item->setGuid($rssItem->guid);
+                    $item->setSource($rssItem->source);
+                    $item->setLanguage($rssItem->language);
+                    $item->setChannel($channel);
+                    
+                    foreach ($rssItem->category as $cat) {
+                        $cat .= $cat . " ";
+                    }
+                    $item->setCategory(trim($cat));
+                        
+                    $this->em->persist($item);
+
+                    $i++;
+                    if ($i == $nb) {
+                        break;
+                    }
                 }
-                $retourParser[$i] = array(
-                                'title'         => $itemTitle,
-                                'pubDate'       => $itemPubDate,
-                                'description'   => $itemDescription,
-                                'link'          => $itemLink,
-                                'category'      => $itemCategory);
-                $i++;
-                
-                if (count($retourParser) == $nb)
-                {
-                    break;
-                }
+                $this->em->flush();
+            } else {
+                $str .= "Impossible de charger le flux ".$channel->getXmlUrl();
             }
-            return $retourParser;
-        } else {
-            return "Impossible de charger le flux $url"; 
         }
-    }
-    
-    public function getTitle()
-    {
-        return $this->title;
-    }
-    
-    public function getLink()
-    {
-        return $this->link;
-    }
-    
-    public function getDescription()
-    {
-        return $this->description;
-    }
-    
-    public function getLanguage()
-    {
-        return $this->language;
-    }
-    
-    public function getUrl()
-    {
-        return $this->url;
+        return $str . "\nTerminé !!";
     }
 }
-
 ?>

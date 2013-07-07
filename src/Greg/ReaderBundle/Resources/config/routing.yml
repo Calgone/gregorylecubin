@@ -2,8 +2,8 @@ reader_index:
     path:   /
     defaults: { _controller: GregReaderBundle:Reader:index }
     
-reader_voir_sub:
-    path:   /voir_sub/{id}
-    defaults: { _controller: GregReaderBundle:Reader:voirSub }
+reader_voir_channel:
+    path:   /channel/{id}
+    defaults: { _controller: GregReaderBundle:Reader:voirChannel }
     requirements:
         sub: \d*

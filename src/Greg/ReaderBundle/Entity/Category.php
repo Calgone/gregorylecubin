@@ -32,9 +32,9 @@ class Category
     /**
      *@var integer
      * 
-     * @ORM\OneToMany(targetEntity="Greg\ReaderBundle\Entity\Sub", mappedBy="category") 
+     * @ORM\OneToMany(targetEntity="Greg\ReaderBundle\Entity\Channel", mappedBy="category") 
      */
-    private $subs;
+    private $channels;
 
     /**
      * Get id
@@ -73,39 +73,39 @@ class Category
      */
     public function __construct()
     {
-        $this->subs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->channels = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
-     * Add subs
+     * Add channels
      *
-     * @param \Greg\ReaderBundle\Entity\Sub $subs
+     * @param \Greg\ReaderBundle\Entity\Channel $channels
      * @return Category
      */
-    public function addSub(\Greg\ReaderBundle\Entity\Sub $subs)
+    public function addChannel(\Greg\ReaderBundle\Entity\Channel $channels)
     {
-        $this->subs[] = $subs;
+        $this->channels[] = $channels;
     
         return $this;
     }
 
     /**
-     * Remove subs
+     * Remove channels
      *
-     * @param \Greg\ReaderBundle\Entity\Sub $subs
+     * @param \Greg\ReaderBundle\Entity\Channel $channels
      */
-    public function removeSub(\Greg\ReaderBundle\Entity\Sub $subs)
+    public function removeChannel(\Greg\ReaderBundle\Entity\Channel $channels)
     {
-        $this->subs->removeElement($subs);
+        $this->channels->removeElement($channels);
     }
 
     /**
-     * Get subs
+     * Get channels
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSubs()
+    public function getChannels()
     {
-        return $this->subs;
+        return $this->channels;
     }
 }

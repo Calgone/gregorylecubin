@@ -11,7 +11,7 @@ namespace Greg\ReaderBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Greg\ReaderBundle\Entity\Category;
-use Greg\ReaderBundle\Entity\Sub;
+use Greg\ReaderBundle\Entity\Channel;
 
 class ReaderController extends Controller {
 
@@ -34,12 +34,13 @@ class ReaderController extends Controller {
         //return new Response("Hello vous êtes sur le reader.");
     }
     
-    public function voirSubAction(Sub $sub)
+    public function voirChannelAction(Channel $channel)
     {
-        $parser = $this->get('rss_parser');
-        $retourParser = $parser->parser($sub->getXmlUrl(), 5, false);
-        return $this->render('GregReaderBundle:Reader:sub.html.twig', array(
-            'feeds'    => $retourParser,
+        
+//        $parser = $this->get('rss_parser');
+//        $retourParser = $parser->parser($channel->getXmlUrl(), 5, false);
+        return $this->render('GregReaderBundle:Reader:channel.html.twig', array(
+            'channel'   => $channel,
         ));
     }
 

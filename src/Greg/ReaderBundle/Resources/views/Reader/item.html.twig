@@ -1,0 +1,17 @@
+<h4>
+    {{ item.title }}
+</h4>
+
+{# On affiche les items de ce channel #}
+
+<div class="well well-small">
+
+    <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
+    <p>
+    Publié le {{ item.pubDate|date('l d/m/Y H:i:s') }}
+    </p>
+    <p>
+        {{ item.description }}
+    </p>
+
+</div>

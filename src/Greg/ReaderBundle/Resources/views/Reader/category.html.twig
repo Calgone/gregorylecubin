@@ -5,17 +5,17 @@
     {{ category.name }}
 </h3>
 
-{# On affiche les subs de cette catégorie #}
-{% if category.subs.count > 0 %}
+{# On affiche les channels de cette catégorie #}
+{% if category.channels.count > 0 %}
 <div class="well well-small">
     Abonnements :
     <ul>
-    {% for sub in category.subs %}
+    {% for channel in category.channels %}
             <li>
         {% if accueil %}
-            <a href="{{ path('reader_voir_sub', {'subId': sub.id} ) }}">{{ sub.title }}</a>
+            <a href="{{ path('reader_voir_channel', {'id': channel.id} ) }}">{{ channel.title }}</a>
         {% else %}
-            {{ sub.title }}
+            {{ channel.title }}
         {% endif %}
             </li>
     {% endfor %}

@@ -67,3 +67,4 @@ swiftmailer:
 services:
     rss_parser:
         class:    Greg\ReaderBundle\Rss\RssParser
+        arguments: ["@doctrine.orm.entity_manager"]

@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Subs
  *
- * @ORM\Table(name="reader_sub")
- * @ORM\Entity(repositoryClass="Greg\ReaderBundle\Entity\SubRepository")
+ * @ORM\Table(name="reader_channel")
+ * @ORM\Entity(repositoryClass="Greg\ReaderBundle\Entity\ChannelRepository")
  */
-class Sub
+class Channel
 {
     /**
      * @var integer
@@ -50,18 +50,38 @@ class Sub
     private $htmlUrl;
 
     /**
+     * @ORM\Column(name="description", type="text")
+     */
+    private $description;
+    
+    /**
+     * @ORM\Column(name="language", type="string", length=20)
+     */
+    private $language;
+    
+    /**
+     * @ORM\Column(name="pubdate", type="datetime")
+     */
+    private $pubDate;
+    
+    /**
+     * @ORM\Column(name="lastBuildDate", type="datetime")
+     */
+    private $lastBuildDate;
+    
+    /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Greg\ReaderBundle\Entity\Category", inversedBy="subs")
+     * @ORM\ManyToOne(targetEntity="Greg\ReaderBundle\Entity\Category", inversedBy="channels")
      */
     private $category;
     
     /**
      * @var integer
      * 
-     * @ORM\OneToMany(targetEntity="Greg\ReaderBundle\Entity\Feed", mappedBy="sub")
+     * @ORM\OneToMany(targetEntity="Greg\ReaderBundle\Entity\Item", mappedBy="channel")
      */
-    private  $feeds;
+    private  $items;
     
     /**
      * Get id
@@ -192,39 +212,131 @@ class Sub
      */
     public function __construct()
     {
-        $this->feeds = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
-     * Add feeds
+     * Add items
      *
-     * @param \Greg\ReaderBundle\Entity\Feed $feeds
-     * @return Sub
+     * @param \Greg\ReaderBundle\Entity\Item $items
+     * @return Channel
      */
-    public function addFeed(\Greg\ReaderBundle\Entity\Feed $feeds)
+    public function addItem(\Greg\ReaderBundle\Entity\Item $items)
     {
-        $this->feeds[] = $feeds;
+        $this->items[] = $items;
     
         return $this;
     }
 
     /**
-     * Remove feeds
+     * Remove items
      *
-     * @param \Greg\ReaderBundle\Entity\Feed $feeds
+     * @param \Greg\ReaderBundle\Entity\Item $items
      */
-    public function removeFeed(\Greg\ReaderBundle\Entity\Feed $feeds)
+    public function removeItem(\Greg\ReaderBundle\Entity\Item $items)
     {
-        $this->feeds->removeElement($feeds);
+        $this->items->removeElement($items);
     }
 
     /**
-     * Get feeds
+     * Get items
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFeeds()
+    public function getItems()
     {
-        return $this->feeds;
+        return $this->items;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Channel
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set language
+     *
+     * @param string $language
+     * @return Channel
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+    
+        return $this;
+    }
+
+    /**
+     * Get language
+     *
+     * @return string 
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
+     * Set pubDate
+     *
+     * @param \DateTime $pubDate
+     * @return Channel
+     */
+    public function setPubDate($pubDate)
+    {
+        $this->pubDate = $pubDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get pubDate
+     *
+     * @return \DateTime 
+     */
+    public function getPubDate()
+    {
+        return $this->pubDate;
+    }
+
+    /**
+     * Set lastBuildDate
+     *
+     * @param \DateTime $lastBuildDate
+     * @return Channel
+     */
+    public function setLastBuildDate($lastBuildDate)
+    {
+        $this->lastBuildDate = $lastBuildDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastBuildDate
+     *
+     * @return \DateTime 
+     */
+    public function getLastBuildDate()
+    {
+        return $this->lastBuildDate;
     }
 }
