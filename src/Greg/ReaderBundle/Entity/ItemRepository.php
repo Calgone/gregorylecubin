@@ -3,6 +3,8 @@
 namespace Greg\ReaderBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 
 /**
  * FeedRepository
@@ -12,15 +14,56 @@ use Doctrine\ORM\EntityRepository;
  */
 class ItemRepository extends EntityRepository
 {
-    function getItems($channelId)
+    
+    
+    function getLastItem($channel)
     {
-        if (!$channelId)
+        if (!$channel)
         {
-            throw new \InvalidArgumentException("L'argument channelId n'est pas défini");
+            throw  new \InvalidArgumentException("channel manquant.");
+        }
+        $query = $this->createQueryBuilder('i')
+                    ->where('i.channel = :channel')
+                    ->setParameter('channel', $channel)
+                    ->orderBy('i.pubDate', 'desc')
+                    ->setMaxResults(1);
+        return $query->getQuery()->getOneOrNullResult();
+    }
+    
+    function getItems(Channel $channel, $nbParPage, $page)
+    {
+        if ($page < 1) {
+            throw new \InvalidArgumentException(
+                    "L'argument \$page ne peut être inférieur à 1 
+                    (valeur : $page)");
+        }
+                
+        $query = $this->createQueryBuilder('i')
+                ->leftJoin('i.channel', 'c')
+                ->addSelect('c')
+                ->where('c.id = :channel')
+                ->orderBy('i.pubDate', 'DESC')
+                ->setParameter('channel', $channel);
+        $query->setFirstResult(($page - 1) * $nbParPage)
+                ->setMaxResults($nbParPage);
+        
+        return new Paginator($query);
+        
+    }
+    
+    function getAllItems($nbParPage, $page) {
+        if ($page < 1) {
+            throw new \InvalidArgumentException(
+                    "L'argument \$page ne peut être inférieur à 1
+                        (valeur: $page)");
         }
         
-        $query = $this->createQueryBuilder('f')
-                ->where('f.channel_id = :subId')
-                ->setParameter('channel_id', $subId);
+        $query = $this->createQueryBuilder('i')
+                        ->leftJoin('i.channel', 'c')
+                        ->addSelect('c')
+                        ->orderBy('i.pubDate', 'DESC')
+                        ->setFirstResult(($page - 1) * $nbParPage)
+                        ->setMaxResults($nbParPage);
+        return new Paginator($query);
     }
 }

@@ -1,18 +1,25 @@
 {# template père du bundle Blog #}
 {% extends "::layout.html.twig" %}
+
 {% block title %}
 Blog - {{ parent() }}
 {% endblock %}
 
 {% block body %}
+    <div id="menu" class="span3">
+    <ul class="nav nav-pills nav-stacked">
+        <li><a href="{{ path('blog_accueil') }}">Accueil du site</a></li>
+        <li><a href="{{ path('blog_ajouter') }}">Ajouter un article</a></li>
+        <li><a href="{{ path('reader_index') }}">Reader</a></li>
+    </ul>
+        {{ render(controller("GregBlogBundle:Blog:menu", {'nombre': 3})) }}
+    </div>
     {# sous-titre commun à tout le bundle #}
-    <h1>Blog</h1>
+    <h2>Blog</h2>
     <hr />
-    
+    <div id="content" class="span9">
     {# on définit un nouveau block que les vues du bundle pourront utiliser #}
     {% block blog_body %}
     {% endblock %}
+    </div>
 {% endblock %}
-
-
-

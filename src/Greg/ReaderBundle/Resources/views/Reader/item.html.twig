@@ -1,17 +1,52 @@
-<h4>
-    {{ item.title }}
-</h4>
+<div class="accordion" id="accordion1">
+    {% for item in items %}
+    <div class="accordion-group">
 
-{# On affiche les items de ce channel #}
-
-<div class="well well-small">
-
-    <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
-    <p>
-    Publié le {{ item.pubDate|date('l d/m/Y H:i:s') }}
-    </p>
-    <p>
-        {{ item.description }}
-    </p>
-
+        <div class="accordion-heading">
+            
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <a style="color: black; font-weight: bold;" 
+                           class="accordion-toggle" data-toggle="collapse" 
+                           data-parent="#accordion1" href="#collapse{{ item.id }}">
+                            {{ item.title }}
+                            <span class="muted" style="font-weight:normal;">
+                            {{ item.description[:50] }}
+                            </span>
+                        </a>
+                    </td>
+            
+               
+                    <td>
+                        <p class="text-right muted" style="margin-right:1em;">
+                            <small>{{ item.pubDate|date('d M H:i')}}</small>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div id="collapse{{ item.id }}" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <big><strong>
+                    <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
+                </strong>
+                </big>
+                <p class="muted">
+                    {% if item.author %}
+                    Par {{ item.author }}
+                    {% endif %}
+                </p>
+                <p>
+                    {{ item.description|raw }}
+                </p>
+            </div>
+        </div>
+        
+    </div>
+    {% else %}
+        <p>Aucun flux à afficher.</p>
+    {% endfor %}
 </div>
+

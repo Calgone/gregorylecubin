@@ -5,24 +5,16 @@ Accueil - {{ parent() }}
 {% endblock %}
 
 {% block reader_body %} 
-<h3>{{ channel.title }}>></h3>
-
-<ul>
-    {% for item in channel.items %}
-        {% include 'GregReaderBundle:Reader:item.html.twig' with {'accueil': true} %}
-        <hr />
-    {% else %}
-        <li>Pas de flux pour cet abonnement !</li>
-    {% endfor %}
-</ul>
-{# <div class="pagination">
+<h4>{{ channel.title }}<small> >></small></h4>
+{% include 'GregReaderBundle:Reader:item.html.twig' with {'accueil': true} %}
+<div class="pagination">
     <ul>
-     On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b 
+     {# On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b #}
         {% for p in range(1, nbParPage) %}
             <li{% if p == page %} class="active"{% endif %}>
-                <a href="{{ path('blog_accueil', {'page': p}) }}">{{ p }}</a>
+                <a href="{{ path('reader_voir_channel', {'id': channel.id, 'page': p}) }}">{{ p }}</a>
             </li>
         {% endfor %}
     </ul>
-</div> #}
+</div>
 {% endblock %}

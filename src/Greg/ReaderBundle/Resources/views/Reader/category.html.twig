@@ -1,15 +1,12 @@
 {# Variable temporaire, définie à false #}
 {% set accueil = accueil|default(false) %}
 
-<h3>
+<li class="nav-header">
     {{ category.name }}
-</h3>
+</li>
 
-{# On affiche les channels de cette catégorie #}
 {% if category.channels.count > 0 %}
-<div class="well well-small">
-    Abonnements :
-    <ul>
+
     {% for channel in category.channels %}
             <li>
         {% if accueil %}
@@ -19,6 +16,5 @@
         {% endif %}
             </li>
     {% endfor %}
-    </ul>
-</div>
+
 {% endif %}

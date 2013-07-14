@@ -34,10 +34,8 @@ class ArticleRepository extends EntityRepository
         }
         
         $query = $this->createQueryBuilder('a')
-                // on joint sur l'attribut image
                 ->leftJoin('a.image', 'i')
                 ->addSelect('i')
-                // on joint sur l'attribut categories
                 ->leftJoin('a.categories', 'c')
                 ->addSelect('c')
                 ->orderBy('a.date', 'DESC')

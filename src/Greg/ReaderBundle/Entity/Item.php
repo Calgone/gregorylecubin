@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Feed
  *
  * @ORM\Table(name="reader_item")
- * @ORM\Entity(repositoryClass="Greg\ReaderBundle\Entity\FeedRepository")
+ * @ORM\Entity(repositoryClass="Greg\ReaderBundle\Entity\ItemRepository")
  */
 class Item {
 
@@ -100,6 +100,13 @@ class Item {
      */
     private $language;
 
+    /**
+     * @var datetime
+     * 
+     * @ORM\Column(name="readdate", type="datetime", nullable=true)
+     */
+    private $readDate;
+    
     /**
      * @var integer
      * 
@@ -402,5 +409,28 @@ class Item {
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * Set readDate
+     *
+     * @param \DateTime $readDate
+     * @return Item
+     */
+    public function setReadDate($readDate)
+    {
+        $this->readDate = $readDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get readDate
+     *
+     * @return \DateTime 
+     */
+    public function getReadDate()
+    {
+        return $this->readDate;
     }
 }

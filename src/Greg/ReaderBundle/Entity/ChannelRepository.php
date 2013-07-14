@@ -4,6 +4,7 @@ namespace Greg\ReaderBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
+
 /**
  * SubsRepository
  *
@@ -24,4 +25,6 @@ class ChannelRepository extends EntityRepository
                 ->getQuery();
         return $query->getResult();
     }
+    
+    
 }

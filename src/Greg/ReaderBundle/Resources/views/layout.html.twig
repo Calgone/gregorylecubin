@@ -1,15 +1,33 @@
-{# template père du bundle Blog #}
+{# template père du reader Blog #}
 {% extends "::layout.html.twig" %}
 {% block title %}
 Reader - {{ parent() }}
 {% endblock %}
 
 {% block body %}
-    {# sous-titre commun à tout le bundle #}
-    <h2>Reader</h2>
+<div class="row-fluid">
+    <div class="span12">
+    <h4>RSS Reader</h4>
     <hr />
+    </div>
+</div>
+<div class="row-fluid">
+    <div id="menu" class="span2">
+    <ul class="nav nav-pills nav-stacked">
+        <li><a href="{{ path('blog_accueil') }}">Accueil du site</a></li>
+        <li><a href="{{ path('reader_index') }}">Reader</a></li>
+        <li><a href="{{ path('reader_channel_add') }}">S'abonner</a></li>
+        <li><a href="{{ path('reader_channels_manage') }}">Gérer abonnements</a></li>
+    </ul>
+        {{ render(controller("GregReaderBundle:Reader:menu", {'nombre': 3})) }}
+    </div>
+    <div id="content" class="span10">
+    {# sous-titre commun à tout le bundle #}
+    
     
     {# on définit un nouveau block que les vues du bundle pourront utiliser #}
     {% block reader_body %}
     {% endblock %}
+    </div>
+</div>
 {% endblock %}

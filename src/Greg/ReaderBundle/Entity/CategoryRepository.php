@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class CategoryRepository extends EntityRepository
 {
     /*
-     * Renvoie la liste des catégories avec leurs subs par ordre 
+     * Renvoie la liste des catégories avec leurs subs par ordre alphabétique
      */
     public function getCategories()
     {

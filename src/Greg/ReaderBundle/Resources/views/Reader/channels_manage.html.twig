@@ -1,0 +1,21 @@
+{% extends "GregReaderBundle::layout.html.twig" %}
+
+{% block title %}
+    Liste des abonnements - {{ parent() }}
+{% endblock %}
+
+{% block reader_body %}
+    <ul>
+        {% for category in categories %}
+            <li>
+            {{ category.name }}
+                    <ul>
+                    {% for channel in category.channels %}
+    
+                    <a href="{{ path('reader_channel_edit', {'id': channel.id} ) }}"> {{ channel.title }}</a>
+                        {% endfor %}
+                    </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

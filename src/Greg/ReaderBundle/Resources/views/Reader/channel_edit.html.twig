@@ -1,0 +1,16 @@
+{% extends "GregReaderBundle::layout.html.twig" %}
+
+{% block title %}
+    Modifier un abonnement - {{ parent() }}
+{% endblock %}
+
+{% block reader_body %}
+    
+<h2>Modifier un abonnement</h2>
+    {% include "GregReaderBundle:Reader:channel_form.html.twig" %}
+<div class="alert alert-info">
+    <p class="text-info">
+        Cet abonnement sera modifié directement sur la page d'accueil après validation
+    </p>
+</div>
+{% endblock %}

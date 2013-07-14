@@ -1,0 +1,19 @@
+/* 
+    Document   : greg
+    Created on : Jul 14, 2013, 6:38:08 PM
+    Author     : greg
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.accordion a:hover {
+    text-decoration: none;
+}
+
+.accordion-inner a:hover {
+    text-decoration: underline;
+}

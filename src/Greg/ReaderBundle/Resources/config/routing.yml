@@ -1,9 +1,27 @@
 reader_index:
-    path:   /
-    defaults: { _controller: GregReaderBundle:Reader:index }
-    
-reader_voir_channel:
-    path:   /channel/{id}
-    defaults: { _controller: GregReaderBundle:Reader:voirChannel }
+    path:   /{page}
+    defaults: { _controller: GregReaderBundle:Reader:index, page: 1 }
     requirements:
-        sub: \d*
+      page: \d*
+      
+reader_voir_channel:
+    path:   /channel/{id}/{page}
+    defaults: { _controller: GregReaderBundle:Reader:voirChannel, page: 1 }
+    requirements:
+        id: \d*
+        page: \d*
+        
+reader_channel_add:
+    path:   /channel/add
+    defaults: { _controller: GregReaderBundle:Reader:channelAdd }
+    
+reader_channels_manage:
+    path:   /channels/manage
+    defaults: { _controller: GregReaderBundle:Reader:channelsManage }
+    
+reader_channel_edit:
+    path:   /channel/edit/{id}
+    defaults: { _controller: GregReaderBundle:Reader:channelEdit }
+    requirements:
+        id: \d+
+    
