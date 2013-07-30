@@ -5,12 +5,19 @@
     {{ category.name }}
 </li>
 
-{% if category.channels.count > 0 %}
+{% if category.channels.count > 0 %} 
 
     {% for channel in category.channels %}
+ 
             <li>
         {% if accueil %}
-            <a href="{{ path('reader_voir_channel', {'id': channel.id} ) }}">{{ channel.title }}</a>
+            <a href="{{ path('reader_voir_channel', {'id': channel.id} ) }}">
+                <img style="width: 16px; height: 16px;" 
+                     src="{{ asset('bundles/gregreader/images/favicons/' ~ channel.faviconFilename) }}" />
+                        {{ channel.title }}
+                        (<span class="channelUnreadCount" id="channel{{ channel.id }}UnreadCount">{{ channel.items.count }}</span>)
+            </a>
+            
         {% else %}
             {{ channel.title }}
         {% endif %}

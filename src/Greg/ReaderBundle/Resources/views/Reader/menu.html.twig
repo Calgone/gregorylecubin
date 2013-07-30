@@ -3,11 +3,14 @@
 <h4>Abonnements</h4>
 
 <div class="well sidebar-nav">
+    
     <ul class="nav nav-list">
+        
     {% for category in categories %}
+         
         {% include 'GregReaderBundle:Reader:category.html.twig' with {'accueil': true} %}
     {% else %}
-        <p>Aucune catégorie.</p>
+        <li>Aucune catégorie.</li>
     {% endfor %}
     </ul>
 </div>

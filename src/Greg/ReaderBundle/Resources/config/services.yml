@@ -1,7 +1,21 @@
 parameters:
 #    greg_reader.example.class: Greg\ReaderBundle\Example
-
+    rss_parser.class:   Greg\ReaderBundle\Services\RssParser
+    favicon_fetcher.class:  Greg\ReaderBundle\Services\FaviconFetcher
+    blob_display.class:   Greg\ReaderBundle\Twig\Base64ImageExtension
+    
 services:
 #    greg_reader.example:
 #        class: %greg_reader.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    rss_parser:
+        class:    "%rss_parser.class%"
+        arguments: ["@doctrine.orm.entity_manager", "@favicon_fetcher"]
+            
+    favicon_fetcher:
+        class:    "%favicon_fetcher.class%"
+        
+    greg.twig.reader_extension:
+        class:    "%blob_display.class%"
+        tags:
+          - { name: twig.extension }

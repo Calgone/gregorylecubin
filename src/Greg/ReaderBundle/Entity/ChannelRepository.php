@@ -26,5 +26,4 @@ class ChannelRepository extends EntityRepository
         return $query->getResult();
     }
     
-    
 }

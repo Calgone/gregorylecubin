@@ -66,4 +66,15 @@ class ItemRepository extends EntityRepository
                         ->setMaxResults($nbParPage);
         return new Paginator($query);
     }
+    
+    function getUnreadItems(Channel $channel) {
+        $qb = $this->createQueryBuilder('i');
+        
+        $query = $qb
+                    ->where('i.channel = :channel')
+                    ->setParameter('channel', $channel)
+                    ->andwhere( $qb->expr()->isNull('i.readDate') )
+                    ->getQuery();
+        return $query->getResult();        
+    }
 }

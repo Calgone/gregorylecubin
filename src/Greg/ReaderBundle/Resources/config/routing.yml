@@ -24,4 +24,17 @@ reader_channel_edit:
     defaults: { _controller: GregReaderBundle:Reader:channelEdit }
     requirements:
         id: \d+
+
+reader_item_mark_read:
+    path:   /item_markread
+    defaults: { _controller: GregReaderBundle:Reader:itemMarkRead }
     
+reader_items_mark_read:
+    path:   /items_mark_read
+    defaults: { _controller: GregReaderBundle:Reader:itemsMarkRead }
+    
+reader_channel_mark_read:
+    path:   /channel_markread/{id}
+    defaults: { _controller: GregReaderBundle:Reader:channelMarkRead }
+    requirements:
+        id: \d+

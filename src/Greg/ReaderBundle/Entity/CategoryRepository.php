@@ -17,11 +17,54 @@ class CategoryRepository extends EntityRepository
      */
     public function getCategories()
     {
-        $query = $this->createQueryBuilder('a')
-                ->leftJoin('a.channels', 's')
-                ->addSelect('s')
-                ->orderBy('a.name')
+        $query = $this->createQueryBuilder('ca')
+                ->leftJoin('ca.channels', 'ch')
+                ->addSelect('ch')
+                ->orderBy('ca.name')
                 ->getQuery();
         return $query->getResult();
     }
+    
+    /*
+     * Renvoie la liste des catégories avec leurs subs par ordre alphabétique
+     */
+    public function getCategoriesWithItemsUnreadCount()
+    {
+        $qb = $this->createQueryBuilder('ca');
+        
+//        $query = $qb->addSelect( array('ch'), $qb->expr()->count('i.id'). 'AS monnb' )
+//                ->leftJoin('ca.channels', 'ch')
+//                ->leftJoin('ch.items', 'i')
+//                ->where($qb->expr()->isNotNull('i.readDate'))
+//                ->groupBy('ch.id')
+//                ->orderBy('ca.name')
+//                ->getQuery();
+//        $query = $qb->select('ca')
+//            ->leftJoin('ca.channels', 'ch')
+//            ->addselect('ch')
+//            ->leftJoin('ch.items', 'i')
+//            ->addSelect($qb->expr()->count('i'))
+//            ->where($qb->expr()->isNotNull('i.readDate'))
+//            ->groupBy('ca, ch')
+//            ->orderBy('ca.name')
+//            ->getQuery();
+//        return $query->getResult();
+//        $query = $this->_em->createQuery(
+//                "   SELECT ca, ch, COUNT(i.id) AS nb 
+//                    FROM GregReaderBundle:Category ca 
+//                        JOIN ca.channels ch 
+//                        JOIN ch.items i
+//                    WHERE i.readDate IS NOT NULL 
+//                    GROUP BY ch.id
+//                    ORDER BY ca.name");
+        $query = $qb->addSelect('ch', 'i')
+                ->leftJoin('ca.channels', 'ch')
+                ->leftJoin('ch.items', 'i', 'WITH', 'i.readDate IS NULL')
+                ->orderBy('ca.name')
+                ->getQuery();
+//        ->where($qb->expr()->isNull('i.readDate'))
+        return $query->getResult();
+    }
+    
+    
 }

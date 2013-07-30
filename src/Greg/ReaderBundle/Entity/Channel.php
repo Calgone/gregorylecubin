@@ -3,12 +3,14 @@
 namespace Greg\ReaderBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Subs
+ * Channel
  *
  * @ORM\Table(name="reader_channel")
  * @ORM\Entity(repositoryClass="Greg\ReaderBundle\Entity\ChannelRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Channel
 {
@@ -55,19 +57,36 @@ class Channel
     private $description;
     
     /**
-     * @ORM\Column(name="language", type="string", length=20)
+     * @ORM\Column(name="language", type="string", length=20, nullable=true)
      */
     private $language;
     
     /**
-     * @ORM\Column(name="pubdate", type="datetime")
+     * @ORM\Column(name="pubdate", type="datetime", nullable=true)
      */
     private $pubDate;
     
     /**
-     * @ORM\Column(name="lastBuildDate", type="datetime")
+     * @ORM\Column(name="lastBuildDate", type="datetime", nullable=true)
      */
     private $lastBuildDate;
+    
+    /**
+     * @ORM\Column(name="favicon_filename", type="text", nullable=true)
+     */
+    private $faviconFileName;
+    
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    
+    private $favicon;
+    
+    /**
+     * 
+     */
+    
+    private $faviconUrl;
     
     /**
      * @var integer
@@ -338,5 +357,102 @@ class Channel
     public function getLastBuildDate()
     {
         return $this->lastBuildDate;
+    }
+    
+//    public function getTotalNonLus()
+//    {
+//        $totalNonLus = 0;
+//        foreach ($this->getItems() as $item)
+//        {
+//            if ($item.getReadDate() === null)
+//                    
+//        }
+//    }
+
+    
+    public function getAbsolutePath()
+    {
+        return null === $this->faviconFileName
+                ? NULL
+                : $this->getFaviconRootDir() . '/' . $this->faviconFileName;
+    }
+    
+    public function getWebPath()
+    {
+        return null === $this->faviconFileName
+                ? null
+                : $this->getFaviconDir() . '/' . $this->faviconFileName;
+    }
+    
+    protected function getFaviconRootDir()
+    {
+        //absolute directory path where files are saved 
+//        return __DIR__.'/../../../../web/'.$this->getFaviconDir();
+            return __DIR__ . '/../Resources/public/images/' . $this->getFaviconDir();
+    }
+
+    protected function getFaviconDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded images in the view
+        return 'favicons';
+    }
+    
+    public function setFavicon($data)
+    {
+        $this->favicon = $data;       
+    }
+    
+    public function getFavicon()
+    {
+        return $this->favicon;
+    }
+    
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function saveFavicon()
+    {
+        if (null === $this->getFaviconUrl()) {
+            return;
+        }
+        var_dump($this->getAbsolutePath());
+//        imagepng($this->favicon, $this->faviconFileName);
+        file_put_contents( $this->getAbsolutePath(), file_get_contents($this->faviconUrl) );
+        
+    }
+
+    /**
+     * Set faviconFileName
+     *
+     * @param string $faviconFileName
+     * @return Channel
+     */
+    public function setFaviconFileName($faviconFileName)
+    {
+        $this->faviconFileName = $faviconFileName;
+    
+        return $this;
+    }
+
+    /**
+     * Get faviconFileName
+     *
+     * @return string 
+     */
+    public function getFaviconFileName()
+    {
+        return $this->faviconFileName;
+    }
+    
+    public function getFaviconUrl()
+    {
+        return $this->faviconUrl;
+    }
+    
+    public function setFaviconUrl($url)
+    {
+        $this->faviconUrl = $url;
     }
 }

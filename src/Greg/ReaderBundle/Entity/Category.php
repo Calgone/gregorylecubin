@@ -5,7 +5,7 @@ namespace Greg\ReaderBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Categorie
+ * Category
  *
  * @ORM\Table(name="reader_category")
  * @ORM\Entity(repositoryClass="Greg\ReaderBundle\Entity\CategoryRepository")

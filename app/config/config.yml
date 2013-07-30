@@ -1,7 +1,8 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-
+    - { resource: "@GregReaderBundle/Resources/config/services.yml" }
+    
 framework:
     #esi:             ~
     #translator:      { fallback: %locale% }
@@ -64,7 +65,10 @@ swiftmailer:
     password:  %mailer_password%
     spool:     { type: memory }
 
-services:
-    rss_parser:
-        class:    Greg\ReaderBundle\Rss\RssParser
-        arguments: ["@doctrine.orm.entity_manager"]
+#services:
+#    rss_parser:
+#        class:    Greg\ReaderBundle\Rss\RssParser
+#        arguments: ["@doctrine.orm.entity_manager"]
+
+#imports:
+    

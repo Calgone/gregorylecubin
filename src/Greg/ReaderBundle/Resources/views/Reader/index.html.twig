@@ -18,4 +18,12 @@ Accueil - {{ parent() }}
         {% endfor %}
     </ul>
 </div>
-{% endblock %}
+{% endblock reader_body %}
+
+{% block documentReady %}
+    {{ parent() }}
+    $('#btnMarkRead').click(function(){
+        readerItemsMarkRead('{{ path("reader_items_mark_read") }}');
+        
+    });
+{% endblock documentReady %}

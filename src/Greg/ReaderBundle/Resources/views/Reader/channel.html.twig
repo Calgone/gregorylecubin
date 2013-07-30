@@ -18,3 +18,10 @@ Accueil - {{ parent() }}
     </ul>
 </div>
 {% endblock %}
+
+{% block documentReady %}
+    {{ parent() }}
+    $('#btnMarkRead').click(function(){
+        readerChannelMarkRead("{{ path('reader_channel_mark_read', {'id': channel.id} ) }}");
+    });
+{% endblock documentReady %}

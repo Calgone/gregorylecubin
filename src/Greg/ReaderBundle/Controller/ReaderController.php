@@ -10,7 +10,7 @@ namespace Greg\ReaderBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Greg\ReaderBundle\Entity\Category;
+use Greg\ReaderBundle\Entity\Item;
 use Greg\ReaderBundle\Entity\Channel;
 
 class ReaderController extends Controller {
@@ -45,10 +45,19 @@ class ReaderController extends Controller {
     }
 
     public function menuAction($nombre) {
+        $str = "";
         $categories = $this->getDoctrine()
                 ->getManager()
                 ->getRepository('GregReaderBundle:Category')
-                ->getCategories();
+                ->getCategoriesWithItemsUnreadCount();
+//        foreach ($categories as $cat) {
+//
+//                $str .= var_dump($cat);
+//
+//        }
+//        return new Response($str);
+//        return new response(var_dump($categories));
+        
         return $this->render('GregReaderBundle:Reader:menu.html.twig', array(
                     'categories' => $categories,
         ));
@@ -125,7 +134,91 @@ class ReaderController extends Controller {
                     'form' => $form->createView(),
         ));
     }
+    
+    public function itemMarkReadAction() {
+        $request = $this->container->get('request');
+        $itemId = $request->query->get('id'); //itemID
+        
+        $em = $this->getDoctrine()->getManager();
+       
+        $item = $em->getRepository('GregReaderBundle:Item')
+                    ->find($itemId);
+        if ($item === null) {
+            throw $this->createNotFoundException("Item [id=$itemId] non trouvé.");
+        }
+        $channelId = $item->getChannel()->getId();
+        $item->setReadDate(new \DateTime());
+       
+        $em->flush();
+  
+        $response = new Response(
+                    json_encode(
+                            array(
+                                "code" => 100, 
+                                "success" => true,
+                                "channelId" => $channelId
+                                 )
+                                )
+                            );
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
+    public function itemsMarkReadAction() { //ALL ITEMS
+        
+        $em = $this->getDoctrine()-> getManager();
+        
+        $query = $em->createQuery(
+                'update GregReaderBundle:Item i 
+                    set i.readDate = :now where i.readDate is null')
+                ->setParameter('now', new \DateTime('now'));
+        $numUpdated = $query->execute();
 
+        $em->flush();
+  
+        $response = new Response(
+                    json_encode(
+                            array(
+                                "code" => 100, 
+                                "success" => true,
+                                 )
+                                )
+                            );
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
+    public function channelMarkReadAction(Channel $channel) {
+//        $request = $this->container->get('request');
+//        $channelId = $request->query->get('channelId');
+        
+//        $em = $this->getDoctrine()->getManager();
+//        if (null !== $channelId) 
+//        {
+//            $query = $em->createQuery('update GregReaderBundle\Entity\Channel c set readDate = now() where isnull(c.');
+//        }
+        $em = $this->getDoctrine()->getManager();
+        
+        //on récupère la liste des items
+        $items = $em
+                ->getRepository('GregReaderBundle:Item')
+                ->getUnreadItems($channel);
+        foreach ($items as $item) {
+            $item->setReadDate(new \DateTime);
+        }
+        $em->flush();
+        $response = new Response(
+                    json_encode(
+                            array(
+                                "code" => 100, 
+                                "success" => true,
+                                "channelId" => $channel->getId()
+                                 )
+                                )
+                            );
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
 }
 
 ?>
